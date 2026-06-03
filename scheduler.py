@@ -1,8 +1,6 @@
 from apscheduler.schedulers.blocking import BlockingScheduler
 from apscheduler.triggers.cron import CronTrigger
 from datetime import datetime
-import schedule
-import time
 from spider import LOFFundSpider
 from wechat_push import WeChatPush
 from config import Config
