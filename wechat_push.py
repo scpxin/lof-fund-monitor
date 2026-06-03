@@ -67,6 +67,7 @@ class WeChatPush:
             return "今日无符合条件的基金数据"
         
         message = f"""## LOF 基金溢价监控日报
+
 **更新时间：** {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}
 **数据条数：** {len(funds)}
 
@@ -78,13 +79,24 @@ class WeChatPush:
         for fund in funds[:20]:
             premium_rate = fund.get("premium_rate", 0)
             rate_str = f"{premium_rate:+.2f}%"
+            price = fund.get('price', 0)
+            nav = fund.get('nav', 0)
             
-            message += f"| {fund.get('fund_code', '')} | {fund.get('fund_name', '')} | {fund.get('price', 0):.3f} | {fund.get('nav', 0):.3f} | {rate_str} | {fund.get('limit', '未披露')} |\n"
+            if price and price > 0:
+                price_str = f"{price:.3f}"
+            else:
+                price_str = "N/A"
+            
+            if nav and nav > 0:
+                nav_str = f"{nav:.3f}"
+            else:
+                nav_str = "N/A"
+            
+            message += f"| {fund.get('fund_code', '')} | {fund.get('fund_name', '')} | {price_str} | {nav_str} | {rate_str} | {fund.get('limit', '未知')} |\n"
         
         if len(funds) > 20:
-            message += f"\n... 还有 {len(funds) - 20} 只基金，详见完整报告"
+            message += f"\n... 还有 {len(funds) - 20} 只基金\n"
         
-        message += "\n\n---\n数据来源：palmmicro.com"
         return message
     
     def format_single_fund_alert(self, fund: Dict) -> str:
@@ -105,8 +117,14 @@ class WeChatPush:
     
     def push(self, funds: List[Dict], method: str = "server_chan") -> bool:
         """推送到微信"""
-        title = f"LOF 基金溢价监控 - {len(funds)}只基金"
+        print(f"开始格式化消息，共{len(funds)}只基金")
+        
+        title = f"LOF 基金溢价 - {len(funds)}只"
         content = self.format_fund_message(funds)
+        
+        print(f"推送标题：{title}")
+        print(f"消息长度：{len(content)} 字符")
+        print(f"消息前 100 字：{content[:100]}")
         
         if method == "push_plus":
             return self.push_push_plus(title, content)
