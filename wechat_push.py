@@ -79,11 +79,12 @@ class WeChatPush:
             premium_rate = fund.get("premium_rate", 0)
             rate_str = f"{premium_rate:+.2f}%"
             
-            message += f"| {fund.get('fund_code', '')} | {fund.get('fund_name', '')} | {fund.get('market_price', 0):.3f} | {fund.get('net_value', 0):.3f} | {rate_str} | {fund.get('limit', '未披露')} |\n"
+            message += f"| {fund.get('fund_code', '')} | {fund.get('fund_name', '')} | {fund.get('price', 0):.3f} | {fund.get('nav', 0):.3f} | {rate_str} | {fund.get('limit', '未披露')} |\n"
         
         if len(funds) > 20:
             message += f"\n... 还有 {len(funds) - 20} 只基金，详见完整报告"
         
+        message += "\n\n---\n数据来源：palmmicro.com"
         return message
     
     def format_single_fund_alert(self, fund: Dict) -> str:

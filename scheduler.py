@@ -57,13 +57,21 @@ def run_once():
     )
     
     print("获取基金数据中...")
+    print(f"Server 酱 KEY: {Config.SERVER_CHAN_KEY[:10]}...")
+    print(f"推送方式：{Config.PUSH_METHOD}")
+    
     funds = spider.get_premium_funds(Config.PREMIUM_RATE_THRESHOLD)
     
     if funds:
         print(f"获取到 {len(funds)} 只基金数据")
         for fund in funds[:5]:
             print(f"  {fund['fund_code']} {fund['fund_name']} 溢价率：{fund['premium_rate']:.2f}%")
-        pusher.push(funds, Config.PUSH_METHOD)
+        print(f"开始推送...")
+        success = pusher.push(funds, Config.PUSH_METHOD)
+        if success:
+            print("推送完成！")
+        else:
+            print("推送失败！")
     else:
         print("没有符合条件的基金数据")
 
