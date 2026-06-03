@@ -1,11 +1,12 @@
 import os
-from dotenv import load_dotenv
 import json
+from dotenv import load_dotenv
 
 load_dotenv()
 
 class Config:
-    def _parse_list(self, env_var: str, default: list) -> list:
+    @staticmethod
+    def _parse_list(env_var: str, default: list) -> list:
         """解析环境变量中的列表"""
         value = os.getenv(env_var, "")
         if value:
@@ -23,7 +24,7 @@ class Config:
     PUSH_METHOD = os.getenv("PUSH_METHOD", "server_chan")
     
     # 爬虫配置
-    LOF_FUND_CODES = _parse_list(None, [
+    LOF_FUND_CODES = [
         "161706",  # 招商优质成长混合 (LOF)
         "163406",  # 兴全合润混合 (LOF)
         "162605",  # 景顺长城鼎益混合 (LOF)
@@ -54,7 +55,7 @@ class Config:
         "161229",  # 国投瑞银研究精选股票 (LOF)
         "161607",  # 融通深证 100 指数 (LOF)
         "161810",  # 银华内需主题混合 (LOF)
-    ])
+    ]
     
     # 溢价率阈值（超过此值才推送）
     PREMIUM_RATE_THRESHOLD = float(os.getenv("PREMIUM_RATE_THRESHOLD", "1.0"))
