@@ -21,7 +21,8 @@ class Config:
     PUSH_PLUS_TOKEN = os.getenv("PUSH_PLUS_TOKEN", "")  # PushPlus token
     
     # 推送方式选择：server_chan 或 push_plus
-    PUSH_METHOD = os.getenv("PUSH_METHOD", "server_chan")
+    _push_method = os.getenv("PUSH_METHOD", "")
+    PUSH_METHOD = _push_method if _push_method else "server_chan"
     
     # 溢价率阈值（超过此值才推送）
     _premium = os.getenv("PREMIUM_RATE_THRESHOLD", "1.0")

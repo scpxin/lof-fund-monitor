@@ -17,9 +17,23 @@ class LOFFundSpider:
             url = "https://palmmicro.com/woody/res/lofcn.php?sort=premium"
             
             response = requests.get(url, headers=self.headers, timeout=15)
+            print(f"API 响应状态码：{response.status_code}")
+            print(f"API 响应内容前 200 字符：{response.text[:200]}")
+            
             response.raise_for_status()
             
-            data = response.json()
+            # 尝试解析 JSON
+            try:
+                data = response.json()
+            except:
+                # 如果不是 JSON，尝试解析 HTML
+                print("响应不是 JSON，尝试其他格式...")
+                return []
+            
+            if not isinstance(data, list):
+                print(f"数据格式异常，期望 list，得到：{type(data)}")
+                return []
+            
             funds = []
             
             for item in data:

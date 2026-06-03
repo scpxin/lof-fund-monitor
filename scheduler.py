@@ -56,9 +56,10 @@ def run_once():
         push_plus_token=Config.PUSH_PLUS_TOKEN
     )
     
-    print("获取基金数据中...")
-    print(f"Server 酱 KEY: {Config.SERVER_CHAN_KEY[:10]}...")
+    print("=== 开始 LOF 基金监控 ===")
+    print(f"Server 酱 KEY: {Config.SERVER_CHAN_KEY[:10]}..." if Config.SERVER_CHAN_KEY else "Server 酱 KEY: 未配置")
     print(f"推送方式：{Config.PUSH_METHOD}")
+    print(f"溢价率阈值：{Config.PREMIUM_RATE_THRESHOLD}%")
     
     funds = spider.get_premium_funds(Config.PREMIUM_RATE_THRESHOLD)
     
@@ -69,9 +70,9 @@ def run_once():
         print(f"开始推送...")
         success = pusher.push(funds, Config.PUSH_METHOD)
         if success:
-            print("推送完成！")
+            print("✅ 推送完成！")
         else:
-            print("推送失败！")
+            print("❌ 推送失败！")
     else:
         print("没有符合条件的基金数据")
 
