@@ -1,15 +1,16 @@
-name: LOF溢价监控
+name: LOF 溢价监控
 
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+permissions:
+  contents: write
 
 on:
   schedule:
     - cron: '30 3 * * 1-5'
     - cron: '30 7 * * 1-5'
   workflow_dispatch:
-  repository_dispatch:
-    types: [manual_trigger]
 
 jobs:
   run:
@@ -32,9 +33,6 @@ jobs:
       - name: 运行溢价监控
         env:
           SERVERCHAN_KEY: ${{ secrets.SERVERCHAN_KEY }}
-          FEISHU_APP_ID: ${{ secrets.FEISHU_APP_ID }}
-          FEISHU_APP_SECRET: ${{ secrets.FEISHU_APP_SECRET }}
-          FEISHU_CHAT_ID: ${{ secrets.FEISHU_CHAT_ID }}
         run: python lof_notify.py
 
       - name: 提交历史数据
