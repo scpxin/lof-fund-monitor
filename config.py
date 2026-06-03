@@ -58,7 +58,8 @@ class Config:
     ]
     
     # 溢价率阈值（超过此值才推送）
-    PREMIUM_RATE_THRESHOLD = float(os.getenv("PREMIUM_RATE_THRESHOLD", "1.0"))
+    _premium = os.getenv("PREMIUM_RATE_THRESHOLD", "1.0")
+    PREMIUM_RATE_THRESHOLD = float(_premium) if _premium else 1.0
     
     # 推送时间（24 小时制）
     # 注意：GitHub Actions 模式下，此配置不生效，推送时间由 workflow 文件定义
