@@ -20,10 +20,7 @@ class FundMonitorScheduler:
         print(f"[{datetime.now()}] 开始执行每日推送任务...")
         
         try:
-            funds = self.spider.get_premium_funds(
-                Config.LOF_FUND_CODES,
-                Config.PREMIUM_RATE_THRESHOLD
-            )
+            funds = self.spider.get_premium_funds(Config.PREMIUM_RATE_THRESHOLD)
             
             if funds:
                 self.pusher.push(funds, Config.PUSH_METHOD)
@@ -60,13 +57,12 @@ def run_once():
     )
     
     print("获取基金数据中...")
-    funds = spider.get_premium_funds(
-        Config.LOF_FUND_CODES,
-        Config.PREMIUM_RATE_THRESHOLD
-    )
+    funds = spider.get_premium_funds(Config.PREMIUM_RATE_THRESHOLD)
     
     if funds:
         print(f"获取到 {len(funds)} 只基金数据")
+        for fund in funds[:5]:
+            print(f"  {fund['fund_code']} {fund['fund_name']} 溢价率：{fund['premium_rate']:.2f}%")
         pusher.push(funds, Config.PUSH_METHOD)
     else:
         print("没有符合条件的基金数据")
